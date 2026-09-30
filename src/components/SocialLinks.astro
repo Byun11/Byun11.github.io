@@ -6,7 +6,13 @@ const all = [
   { key: 'github', label: 'GitHub', href: profile.links.github, external: true },
   { key: 'linkedin', label: 'LinkedIn', href: profile.links.linkedin, external: true },
   { key: 'scholar', label: 'Scholar', href: profile.links.scholar, external: true },
-  { key: 'cv', label: 'CV', href: profile.links.cv, external: false },
+  // a Google Docs share link opens in a tab; a local PDF is a download
+  {
+    key: 'cv',
+    label: 'CV',
+    href: profile.links.cv,
+    external: /^https?:/.test(profile.links.cv),
+  },
 ];
 const links = all.filter((l) => l.href);
 

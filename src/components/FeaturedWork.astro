@@ -1,5 +1,5 @@
 ---
-import StackPanel from './StackPanel.astro';
+import GlassVisual from './GlassVisual.astro';
 import type { Project } from '../data/site';
 
 interface Props {
@@ -7,68 +7,59 @@ interface Props {
 }
 const { project } = Astro.props;
 
-// §15 — a button only appears once the thing it points at exists.
-const actions = [
-  { label: 'Paper', href: project.links?.paper },
-  { label: 'Code', href: project.links?.code },
-  { label: 'Demo', href: project.links?.demo },
-].filter((a) => a.href);
+// Home shows the short line only; the full description lives on the detail
+// page. The long version turned this card into a paper abstract.
+const demo = project.links?.demo;
+const hasDetail = Boolean(project.detail?.length);
 ---
 
 <article
-  class="card flex flex-col overflow-hidden rounded-[30px] md:grid md:min-h-[400px] md:grid-cols-[45%_55%]"
+  class="card flex flex-col overflow-hidden rounded-[30px] md:grid md:min-h-[360px] md:grid-cols-[52%_48%]"
 >
-  <!-- §24 — on mobile the visual sits in the lower half of the card, so it is
-       ordered second there and first (left column) from md up. -->
-  <StackPanel
-    steps={['Document', 'Selective Retrieval', 'Browser Agent', 'Web Form']}
-    caption="System sketch"
-    class="order-2 min-h-[200px] border-t border-[rgba(0,0,0,.07)] md:order-1 md:min-h-0 md:border-t-0 md:border-r"
-  />
+  <div class="order-1 flex flex-col justify-center gap-4 p-7 sm:p-9 md:order-1 md:p-10">
+    <p class="eyebrow">Featured</p>
 
-  <div class="order-1 flex flex-col justify-center gap-5 p-7 sm:p-10 md:order-2">
-    <p class="eyebrow">Featured Work</p>
-
-    <div class="space-y-2">
-      <h3 class="display text-[34px] leading-[1.05] sm:text-[42px]">
+    <div class="space-y-1.5">
+      <h3 class="display text-[32px] leading-[1.05] sm:text-[40px]">
         {project.title}
       </h3>
       <p class="text-[17px] text-[#6e6e73]">{project.subtitle}</p>
     </div>
 
-    <p class="max-w-[46ch] text-[15px] leading-[1.6] text-[#6e6e73]">
-      {project.description}
+    <p class="max-w-[34ch] text-[15px] leading-[1.55] text-[#6e6e73]">
+      {project.blurb}
     </p>
 
-    <ul class="flex flex-wrap gap-1.5">
-      {
-        project.tags.map((t) => (
-          <li class="rounded-full border border-[rgba(0,0,0,.07)] px-3 py-1 text-[12px] text-[#6e6e73]">
-            {t}
-          </li>
-        ))
-      }
-    </ul>
+    <!-- at most two, as one line of text rather than a row of pills -->
+    <p class="text-[13px] text-[#9a9a9f]">{project.tags.slice(0, 2).join(' · ')}</p>
 
-    <div class="flex flex-wrap items-center gap-2 pt-1">
+    <div class="mt-1 flex items-center justify-between gap-3">
       {
-        actions.map((a) => (
+        demo && (
           <a
-            href={a.href}
+            href={demo}
             target="_blank"
             rel="noopener noreferrer"
-            class="glass rounded-full px-4 py-2 text-[13px] font-medium transition-transform duration-200 hover:-translate-y-0.5"
+            class="glass rounded-full px-5 py-2.5 text-[13px] font-medium transition-transform duration-200 hover:-translate-y-0.5"
           >
-            <span class="relative">{a.label}</span>
+            <span class="relative">Demo</span>
           </a>
-        ))
+        )
       }
-      <a
-        href={`/work/${project.slug}`}
-        class="group ml-auto inline-flex items-center gap-1.5 text-[13px] font-medium text-[#111]"
-      >
-        Details <span class="arrow" aria-hidden="true">→</span>
-      </a>
+      {
+        hasDetail && (
+          <a
+            href={`/work/${project.slug}`}
+            class="group inline-flex items-center gap-1.5 text-[13px] font-medium text-[#111]"
+          >
+            View project <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+        )
+      }
     </div>
   </div>
+
+  <GlassVisual
+    class="order-2 min-h-[260px] md:order-2 md:min-h-0"
+  />
 </article>

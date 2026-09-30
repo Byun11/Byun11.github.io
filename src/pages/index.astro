@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import StackPanel from '../components/StackPanel.astro';
+import GlassVisual from '../components/GlassVisual.astro';
 import FeaturedWork from '../components/FeaturedWork.astro';
 import NavCard from '../components/NavCard.astro';
 import { profile, projects } from '../data/site';
@@ -10,95 +10,70 @@ const featured = projects.find((p) => p.featured)!;
 ---
 
 <Base>
-  <!-- ── HERO (§9, §22) ─────────────────────────────────────────── -->
+  <!-- ── HERO ───────────────────────────────────────────────────────
+       Desktop hero is held to ~560px. It used to run near a full
+       viewport, which read as unfinished rather than minimal. -->
   <section
-    class="mx-auto max-w-[1280px] px-5 pb-[72px] pt-[132px] md:px-8 md:pb-[120px] md:pt-[190px]"
+    class="mx-auto max-w-[1280px] px-5 pb-[56px] pt-[124px] md:px-8 md:pb-[64px] md:pt-[148px]"
   >
-    <div class="md:grid md:grid-cols-[58%_42%] md:items-center md:gap-10">
-      <!-- Mobile centres the identity (§22); desktop is left-aligned (§9). -->
+    <div
+      class="md:grid md:min-h-[400px] md:grid-cols-[54%_46%] md:items-center md:gap-8"
+    >
       <div class="rise text-center md:text-left">
         <p class="eyebrow">{profile.title}</p>
 
+        <!-- one line; it only breaks on genuinely narrow screens -->
         <h1
-          class="display mt-4 text-[48px] leading-[0.95] sm:text-[56px] md:mt-5 md:text-[88px] md:leading-[0.9] lg:text-[104px]"
+          class="display mt-4 text-[44px] leading-[1.02] whitespace-nowrap sm:text-[52px] md:mt-5 md:text-[72px] lg:text-[84px]"
         >
-          {profile.nameLines[0]}<br class="hidden md:block" />
-          <span class="md:hidden"> </span>{profile.nameLines[1]}
+          {profile.name}
         </h1>
 
-        <p
-          class="mt-4 text-[14px] text-[#6e6e73] md:mt-6 md:text-[15px]"
-        >
+        <p class="mt-3 text-[14px] text-[#6e6e73] md:mt-4 md:text-[15px]">
           {profile.fields.join(' · ')}
         </p>
 
         <p
-          class="mx-auto mt-5 max-w-[560px] text-[16px] leading-[1.55] text-[#6e6e73] md:mx-0 md:mt-7 md:text-[18px]"
+          class="mx-auto mt-4 max-w-[440px] text-[16px] leading-[1.5] text-[#6e6e73] md:mx-0 md:mt-5 md:text-[18px]"
         >
           {profile.summary}
         </p>
 
-        <div class="mt-7 md:mt-9">
+        <div class="mt-6 md:mt-8">
           <div class="md:hidden"><SocialLinks layout="grid" /></div>
           <div class="hidden md:block"><SocialLinks /></div>
         </div>
       </div>
 
-      <!-- §10 — abstract identity panel, not a stock image. Desktop only:
-           on mobile the hero must stay within the first screen (§22). -->
-      <StackPanel
-        steps={['Document', 'Grounding', 'Agents', 'Tools', 'Browser', 'Multimodal']}
-        class="card mt-12 hidden min-h-[440px] rounded-[30px] md:mt-0 md:block"
-      />
+      {/* wrapper carries the hiding: GlassVisual's scoped `display: grid`
+          outranks Tailwind's `hidden` when applied to the same element */}
+      <div class="hidden md:block">
+        <GlassVisual class="min-h-[360px]" />
+      </div>
     </div>
   </section>
 
-  <!-- ── SELECTED WORK (§12) ────────────────────────────────────── -->
+  <!-- ── SELECTED WORK ────────────────────────────────────────────── -->
   <section class="mx-auto max-w-[1280px] px-5 md:px-8">
-    <h2 class="display mb-6 text-[26px] md:mb-8 md:text-[32px]">Selected Work</h2>
+    <h2 class="display mb-5 text-[26px] md:mb-7 md:text-[30px]">Selected Work</h2>
     <FeaturedWork project={featured} />
   </section>
 
-  <!-- ── SECONDARY NAVIGATION (§16–§19) ─────────────────────────── -->
-  <section class="mx-auto mt-4 max-w-[1280px] px-5 md:mt-6 md:px-8">
+  <!-- ── SECONDARY NAVIGATION ─────────────────────────────────────── -->
+  <section class="mx-auto mt-3 max-w-[1280px] px-5 md:mt-4 md:px-8">
     <div class="navcards grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-      <NavCard
-        eyebrow="Publications"
-        title="Selected Publications"
-        body="Papers on retrieval-augmented generation, document understanding, and LLM systems."
-        cta="View publications"
-        href="/publications"
-        icon="book"
-      />
-      <NavCard
-        eyebrow="Projects"
-        title="Research Projects"
-        body="Experiments, prototypes, and open-source systems."
-        cta="View projects"
-        href="/work"
-        icon="grid"
-      />
-      <!-- 2-up on mobile would leave About orphaned, so it spans (§25). -->
-      <NavCard
-        eyebrow="About"
-        title="Research & Experience"
-        body="Research interests, experience, and background."
-        cta="About me"
-        href="/about"
-        icon="user"
-      />
+      <NavCard eyebrow="Publications" title="Papers" href="/publications" icon="book" />
+      <NavCard eyebrow="Projects" title="Research" href="/work" icon="grid" />
+      <NavCard eyebrow="About" title="Experience" href="/about" icon="user" />
     </div>
   </section>
 </Base>
 
 <style>
-  /* §25 — mobile: two small cards, then About full-width underneath.
-     Scoped to .navcards; a bare `.grid > :last-child` rule also caught the
-     social-link grid and stretched its last button. */
+  /* mobile: two small cards, then About full-width underneath */
   @media (max-width: 767px) {
     .navcards > :global(:last-child) {
       grid-column: span 2;
-      min-height: 0;
     }
   }
 </style>

@@ -9,12 +9,12 @@ export const profile = {
   affiliation: 'UST–KISTI',
   fields: ['Web Agents', 'Document AI', 'Multimodal AI'],
   summary:
-    'I build AI systems that work with documents, browsers, and multimodal information.',
+    'I build AI agents that work with documents and the web.',
   links: {
     github: 'https://github.com/Byun11',
     linkedin: '', // TODO: fill in
     scholar: 'https://scholar.google.com/citations?user=oITFr4IAAAAJ&hl=ko',
-    cv: '', // TODO: drop the PDF in /public and point here, e.g. '/cv.pdf'
+    cv: '', // TODO: Google Docs share link
     email: '',
   },
 } as const;
@@ -31,7 +31,8 @@ export type Project = {
   index: string;
   title: string;
   subtitle: string;
-  description: string;
+  blurb: string;       // one line, for the home card
+  description: string; // full version, detail page only
   year: number;
   tags: readonly string[];
   featured?: boolean;
@@ -48,6 +49,7 @@ export const projects: readonly Project[] = [
     index: '01',
     title: 'KONI-Forms',
     subtitle: 'Document-grounded browser agent',
+    blurb: 'Selective document access for real-world web forms.',
     description:
       'An in-browser AI agent that selectively retrieves information from attached documents and completes real-world web forms — and asks the user when the document does not settle a value, instead of fabricating one.',
     year: 2026,
@@ -82,6 +84,7 @@ export const projects: readonly Project[] = [
     index: '02',
     title: 'MoE Expert Transplant',
     subtitle: 'Cross-model expert representation experiments',
+    blurb: 'What survives when an expert moves between models.',
     description:
       'Transplanting capability-bearing experts between Mixture-of-Experts models, and measuring what survives the move across differing representation spaces.',
     year: 2026,
@@ -92,6 +95,7 @@ export const projects: readonly Project[] = [
     index: '03',
     title: 'FlyVL',
     subtitle: 'Connectome-derived visual encoders',
+    blurb: 'A fly brain wiring diagram, used as a vision encoder.',
     description:
       'Using the Drosophila MaleCNS connectome as a visual encoder — an ongoing set of experiments, controls, and negative results rather than a finished system.',
     year: 2026,
