@@ -33,7 +33,7 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
     <p class="eyebrow">Featured</p>
     <h3 class="display title">{project.title}</h3>
     <p class="sub">{project.subtitle}</p>
-    <p class="blurb">{project.blurb}</p>
+    <p class="blurb">{project.blurb}</p>{/* desktop only */}
   </div>
 
   <CircleArrow />
@@ -85,7 +85,7 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
 
   .copy {
     position: relative;
-    max-width: 60%;
+    max-width: 66%;
   }
 
   .title {
@@ -102,6 +102,7 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
   }
 
   .blurb {
+    display: none;
     margin-top: 8px;
     max-width: 24ch;
     font-size: 13px;
@@ -139,6 +140,7 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
     }
 
     .blurb {
+      display: block;
       margin-top: 14px;
       font-size: 15px;
     }

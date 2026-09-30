@@ -131,10 +131,24 @@ const isCurrent = (href: string) =>
 
   :global(#site-header.is-condensed) .mbar {
     /* shrink from the left so the button stays put */
-    margin-left: calc(100% - 64px);
+    margin-left: calc(100% - 56px);
+    width: 56px;
     height: 56px;
-    padding-inline: 8px;
+    padding-inline: 0;
+    justify-content: center;
     border-radius: 999px;
+  }
+
+  /* the bar itself is the control once condensed; a glass pill inside a
+     glass pill was what made it read as a floating blob */
+  :global(#site-header.is-condensed) .mbar-btn {
+    background: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 0;
+    box-shadow: none;
+    width: 56px;
+    height: 56px;
   }
 
   :global(#site-header.is-condensed) .mbar-logo {
