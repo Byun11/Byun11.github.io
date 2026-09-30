@@ -211,12 +211,12 @@ export const publications: readonly Publication[] = [
 
 export const about = {
   bio: [
-    'I am a researcher at UST–KISTI working on AI systems that read documents and act on the web. My interest is the seam between the two: how an agent stays grounded in a source document instead of guessing, and what it should do when the document genuinely does not answer the question.',
+    'I am a student researcher at UST–KISTI working on AI systems that read documents and act on the web. My interest is the seam between the two: how an agent stays grounded in a source document instead of guessing, and what it should do when the document genuinely does not answer the question.',
     'Before that my work centred on retrieval-augmented generation — designing question-answering systems over personal and domain databases, and measuring where retrieval actually improves reliability rather than only fluency.',
   ],
   interests: ['Web Agents', 'Document AI', 'Multimodal AI', 'LLM Systems'],
   experience: [
-    { org: 'KISTI', role: 'Researcher', note: 'Korea Institute of Science and Technology Information' },
+    { org: 'KISTI', role: 'Student Researcher', note: 'Korea Institute of Science and Technology Information' },
     { org: 'UST', role: 'M.S., Applied AI', note: 'University of Science and Technology' },
   ],
 } as const;
