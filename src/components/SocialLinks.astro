@@ -1,18 +1,14 @@
 ---
+import Icon from './Icon.astro';
+import type { IconName } from '../lib/icons';
 import { profile } from '../data/site';
 
-// A link with no URL yet is dropped entirely rather than rendered dead (§37).
-const all = [
-  { key: 'github', label: 'GitHub', href: profile.links.github, external: true },
-  { key: 'linkedin', label: 'LinkedIn', href: profile.links.linkedin, external: true },
-  { key: 'scholar', label: 'Scholar', href: profile.links.scholar, external: true },
-  // a Google Docs share link opens in a tab; a local PDF is a download
-  {
-    key: 'cv',
-    label: 'CV',
-    href: profile.links.cv,
-    external: /^https?:/.test(profile.links.cv),
-  },
+// A link with no URL yet is dropped rather than rendered dead.
+const all: { label: string; href: string; icon: IconName }[] = [
+  { label: 'GitHub', href: profile.links.github, icon: 'github' },
+  { label: 'LinkedIn', href: profile.links.linkedin, icon: 'linkedin' },
+  { label: 'Scholar', href: profile.links.scholar, icon: 'graduation-cap' },
+  { label: 'CV', href: profile.links.cv, icon: 'file-text' },
 ];
 const links = all.filter((l) => l.href);
 
@@ -22,28 +18,74 @@ interface Props {
 const { layout = 'row' } = Astro.props;
 ---
 
-<ul
-  class:list={[
-    layout === 'grid'
-      ? 'grid grid-cols-2 gap-2 sm:flex sm:flex-wrap'
-      : 'flex flex-wrap gap-2',
-  ]}
->
+<ul class:list={['social', layout === 'grid' ? 'is-grid' : 'is-row']}>
   {
     links.map((l) => (
       <li>
         <a
           href={l.href}
-          target={l.external ? '_blank' : undefined}
-          rel={l.external ? 'noopener noreferrer' : undefined}
-          class="glass group flex h-11 items-center justify-center gap-2 rounded-full px-[18px] text-[14px] font-medium text-[#111] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(0,0,0,.09)] sm:justify-start"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="glass group"
         >
+          <Icon name={l.icon} size={18} class="relative shrink-0 text-[#6e6e73]" />
           <span class="relative">{l.label}</span>
-          <span class="arrow relative text-[#9a9a9f]" aria-hidden="true">
-            {l.external ? '↗' : '↓'}
-          </span>
+          <Icon
+            name="arrow-up-right"
+            size={16}
+            class="arrow relative ml-auto shrink-0 text-[#9a9a9f]"
+          />
         </a>
       </li>
     ))
   }
 </ul>
+
+<style>
+  .social {
+    display: grid;
+    gap: 10px;
+  }
+
+  /* 2×2 on mobile — four labelled buttons never fit one row at 390px */
+  .social.is-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .social.is-row {
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    justify-content: start;
+  }
+
+  .social a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: var(--btn-h);
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .social a:hover {
+    transform: translateY(-2px);
+    box-shadow:
+      0 1px 2px rgba(21, 40, 74, 0.04),
+      0 16px 38px rgba(21, 40, 74, 0.1);
+  }
+
+  .social.is-row a {
+    gap: 8px;
+  }
+
+  /* the trailing arrow should not stretch a row-layout button */
+  .social.is-row a :global(.arrow) {
+    margin-left: 2px;
+  }
+</style>

@@ -1,7 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
 import SocialLinks from '../components/SocialLinks.astro';
-import GlassVisual from '../components/GlassVisual.astro';
 import FeaturedWork from '../components/FeaturedWork.astro';
 import NavCard from '../components/NavCard.astro';
 import { profile, projects } from '../data/site';
@@ -10,70 +9,146 @@ const featured = projects.find((p) => p.featured)!;
 ---
 
 <Base>
-  <!-- ── HERO ───────────────────────────────────────────────────────
-       Desktop hero is held to ~560px. It used to run near a full
-       viewport, which read as unfinished rather than minimal. -->
-  <section
-    class="mx-auto max-w-[1280px] px-5 pb-[56px] pt-[124px] md:px-8 md:pb-[64px] md:pt-[148px]"
-  >
-    <div
-      class="md:grid md:min-h-[400px] md:grid-cols-[54%_46%] md:items-center md:gap-8"
-    >
-      <div class="rise text-center md:text-left">
-        <p class="eyebrow">{profile.title}</p>
+  <div class="page">
+    <section class="hero rise">
+      <p class="eyebrow">{profile.title}</p>
+      <h1 class="display name">{profile.name}</h1>
+      <p class="fields">{profile.fields.join(' · ')}</p>
+      <p class="summary">{profile.summary}</p>
 
-        <!-- one line; it only breaks on genuinely narrow screens -->
-        <h1
-          class="display mt-4 text-[44px] leading-[1.02] whitespace-nowrap sm:text-[52px] md:mt-5 md:text-[72px] lg:text-[84px]"
-        >
-          {profile.name}
-        </h1>
-
-        <p class="mt-3 text-[14px] text-[#6e6e73] md:mt-4 md:text-[15px]">
-          {profile.fields.join(' · ')}
-        </p>
-
-        <p
-          class="mx-auto mt-4 max-w-[440px] text-[16px] leading-[1.5] text-[#6e6e73] md:mx-0 md:mt-5 md:text-[18px]"
-        >
-          {profile.summary}
-        </p>
-
-        <div class="mt-6 md:mt-8">
-          <div class="md:hidden"><SocialLinks layout="grid" /></div>
-          <div class="hidden md:block"><SocialLinks /></div>
-        </div>
+      <div class="links">
+        <div class="only-mobile"><SocialLinks layout="grid" /></div>
+        <div class="only-desktop"><SocialLinks /></div>
       </div>
 
-      {/* wrapper carries the hiding: GlassVisual's scoped `display: grid`
-          outranks Tailwind's `hidden` when applied to the same element */}
-      <div class="hidden md:block">
-        <GlassVisual class="min-h-[360px]" />
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ── SELECTED WORK ────────────────────────────────────────────── -->
-  <section class="mx-auto max-w-[1280px] px-5 md:px-8">
-    <h2 class="display mb-5 text-[26px] md:mb-7 md:text-[30px]">Selected Work</h2>
-    <FeaturedWork project={featured} />
-  </section>
+    <section>
+      <h2 class="display section-title">Selected Work</h2>
+      <FeaturedWork project={featured} />
+    </section>
 
-  <!-- ── SECONDARY NAVIGATION ─────────────────────────────────────── -->
-  <section class="mx-auto mt-3 max-w-[1280px] px-5 md:mt-4 md:px-8">
-    <div class="navcards grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-      <NavCard eyebrow="Publications" title="Papers" href="/publications" icon="book" />
-      <NavCard eyebrow="Projects" title="Research" href="/work" icon="grid" />
+    <section class="navcards">
+      <NavCard eyebrow="Publications" title="Papers" href="/publications" icon="book-open" />
+      <NavCard eyebrow="Projects" title="Research" href="/work" icon="layout-grid" />
       <NavCard eyebrow="About" title="Experience" href="/about" icon="user" />
-    </div>
-  </section>
+    </section>
+  </div>
 </Base>
 
 <style>
-  /* mobile: two small cards, then About full-width underneath */
-  @media (max-width: 767px) {
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    padding-bottom: var(--section-gap);
+  }
+
+  .page > section + section {
+    margin-top: var(--section-gap);
+  }
+
+  .navcards {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 12px !important;
+  }
+
+  /* two small cards, then About full width underneath */
+  .navcards > :global(:last-child) {
+    grid-column: span 2;
+    min-height: 0;
+  }
+
+  .hero {
+    padding-top: calc(64px + var(--hero-top-gap));
+    text-align: center;
+  }
+
+  .name {
+    margin-top: 12px;
+    font-size: 56px;
+    line-height: 1.02;
+  }
+
+  .fields {
+    margin-top: 10px;
+    font-size: 16px;
+    color: var(--color-ink-2);
+  }
+
+  .summary {
+    max-width: 34ch;
+    margin: 14px auto 0;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--color-ink-2);
+  }
+
+  .links {
+    margin-top: 28px;
+  }
+
+  .section-title {
+    margin-bottom: 16px;
+    font-size: 24px;
+  }
+
+  .only-desktop {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding-inline: 32px;
+      padding-bottom: 96px;
+    }
+
+    .page > section + section {
+      margin-top: 72px;
+    }
+
+    .only-mobile {
+      display: none;
+    }
+
+    .only-desktop {
+      display: block;
+    }
+
+    /* The ambient artwork now occupies the right side of the viewport, so the
+       hero is one column of text rather than text + a drawn panel. */
+    .hero {
+      min-height: 400px;
+      padding-top: 148px;
+      text-align: left;
+    }
+
+    .name {
+      font-size: 76px;
+      white-space: nowrap;
+    }
+
+    .summary {
+      margin-inline: 0;
+      max-width: 30ch;
+      font-size: 18px;
+    }
+
+    .section-title {
+      font-size: 28px;
+      margin-bottom: 20px;
+    }
+
+    .navcards {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-top: 16px !important;
+    }
+
     .navcards > :global(:last-child) {
-      grid-column: span 2;
+      grid-column: auto;
     }
   }
 </style>

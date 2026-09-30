@@ -1,0 +1,43 @@
+---
+import { readFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import type { IconName } from '../lib/icons';
+
+// Every icon on the site comes through here, from one library (Lucide), with
+// stroke width and size forced to the fixed set. Mixing libraries — or letting
+// each call site pick its own stroke — is what made the earlier icons read as
+// four different sets.
+
+interface Props {
+  name: IconName;
+  /** 18 = social button · 20 = card · 16 = arrow. Nothing else. */
+  size?: 16 | 18 | 20;
+  class?: string;
+}
+
+const { name, size = 16, class: cls = '' } = Astro.props;
+
+const STROKE = 1.75;
+
+const raw = readFileSync(
+  fileURLToPath(new URL(`../../node_modules/lucide-static/icons/${name}.svg`, import.meta.url)),
+  'utf-8',
+);
+
+// Keep only the path data; the wrapper below owns every other attribute.
+const body = raw.slice(raw.indexOf('>', raw.indexOf('<svg')) + 1).replace('</svg>', '').trim();
+---
+
+<svg
+  width={size}
+  height={size}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width={STROKE}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class={cls}
+  aria-hidden="true"
+  set:html={body}
+/>

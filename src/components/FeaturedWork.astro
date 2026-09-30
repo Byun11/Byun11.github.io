@@ -1,5 +1,8 @@
 ---
-import GlassVisual from './GlassVisual.astro';
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import koniWide from '../assets/koni-visual-wide.png';
+import koniTall from '../assets/koni-visual-tall.png';
 import type { Project } from '../data/site';
 
 interface Props {
@@ -7,59 +10,170 @@ interface Props {
 }
 const { project } = Astro.props;
 
-// Home shows the short line only; the full description lives on the detail
-// page. The long version turned this card into a paper abstract.
 const demo = project.links?.demo;
 const hasDetail = Boolean(project.detail?.length);
 ---
 
-<article
-  class="card flex flex-col overflow-hidden rounded-[30px] md:grid md:min-h-[360px] md:grid-cols-[52%_48%]"
->
-  <div class="order-1 flex flex-col justify-center gap-4 p-7 sm:p-9 md:order-1 md:p-10">
+<article class="card feature">
+  <div class="copy">
     <p class="eyebrow">Featured</p>
 
-    <div class="space-y-1.5">
-      <h3 class="display text-[32px] leading-[1.05] sm:text-[40px]">
-        {project.title}
-      </h3>
-      <p class="text-[17px] text-[#6e6e73]">{project.subtitle}</p>
+    <div>
+      <h3 class="display title">{project.title}</h3>
+      <p class="sub">{project.subtitle}</p>
     </div>
 
-    <p class="max-w-[34ch] text-[15px] leading-[1.55] text-[#6e6e73]">
-      {project.blurb}
-    </p>
+    <p class="blurb">{project.blurb}</p>
 
-    <!-- at most two, as one line of text rather than a row of pills -->
-    <p class="text-[13px] text-[#9a9a9f]">{project.tags.slice(0, 2).join(' · ')}</p>
+    <!-- at most two, as plain text rather than a row of pills -->
+    <p class="tags">{project.tags.slice(0, 2).join(' · ')}</p>
 
-    <div class="mt-1 flex items-center justify-between gap-3">
+    <div class="actions">
       {
         demo && (
-          <a
-            href={demo}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="glass rounded-full px-5 py-2.5 text-[13px] font-medium transition-transform duration-200 hover:-translate-y-0.5"
-          >
+          <a href={demo} target="_blank" rel="noopener noreferrer" class="glass demo">
             <span class="relative">Demo</span>
           </a>
         )
       }
       {
         hasDetail && (
-          <a
-            href={`/work/${project.slug}`}
-            class="group inline-flex items-center gap-1.5 text-[13px] font-medium text-[#111]"
-          >
-            View project <span class="arrow" aria-hidden="true">↗</span>
+          <a href={`/work/${project.slug}`} class="group view">
+            View project
+            <Icon name="arrow-up-right" size={16} class="arrow shrink-0" />
           </a>
         )
       }
     </div>
   </div>
 
-  <GlassVisual
-    class="order-2 min-h-[260px] md:order-2 md:min-h-0"
-  />
+  <div class="visual">
+    <Image class="wide" src={koniWide} alt="" widths={[640, 960, 1400]} sizes="(min-width: 768px) 48vw, 100vw" loading="lazy" />
+    <Image class="tall" src={koniTall} alt="" widths={[420, 780]} sizes="100vw" loading="lazy" />
+  </div>
 </article>
+
+<style>
+  .feature {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius-feature);
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--card-gap);
+    padding: var(--card-pad);
+  }
+
+  .title {
+    font-size: 24px;
+    line-height: 1.1;
+  }
+
+  .sub {
+    margin-top: 4px;
+    font-size: 16px;
+    color: var(--color-ink-2);
+  }
+
+  .blurb {
+    max-width: 34ch;
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--color-ink-2);
+  }
+
+  .tags {
+    font-size: 14px;
+    color: var(--color-ink-3);
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 2px;
+  }
+
+  .demo {
+    display: inline-flex;
+    align-items: center;
+    height: var(--btn-h);
+    padding: 0 22px;
+    border-radius: var(--radius-pill);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition: transform 200ms ease;
+  }
+
+  .demo:hover {
+    transform: translateY(-2px);
+  }
+
+  .view {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+  }
+
+  .visual {
+    position: relative;
+    min-height: 260px;
+  }
+
+  .visual :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* the artwork has its own border plate; crop it out */
+    transform: scale(1.14);
+  }
+
+  .visual :global(.wide) {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .feature {
+      display: grid;
+      grid-template-columns: 52% 48%;
+      min-height: 380px;
+    }
+
+    .copy {
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .title {
+      font-size: 40px;
+    }
+
+    .sub {
+      font-size: 17px;
+    }
+
+    .visual {
+      min-height: 0;
+      height: 100%;
+      align-self: stretch;
+    }
+
+    .visual :global(.tall) {
+      display: none;
+    }
+
+    .visual :global(.wide) {
+      display: block;
+    }
+  }
+</style>
