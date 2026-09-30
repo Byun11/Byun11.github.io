@@ -1,25 +1,24 @@
 ---
 import Icon from './Icon.astro';
+import CircleArrow from './CircleArrow.astro';
 import type { IconName } from '../lib/icons';
 
 interface Props {
-  eyebrow: string;
   title: string;
+  body: string;
   href: string;
   icon: IconName;
 }
-const { eyebrow, title, href, icon } = Astro.props;
+const { title, body, href, icon } = Astro.props;
 ---
 
 <a href={href} class="card navcard group">
-  <Icon name={icon} size={20} class="text-[#9a9a9f]" />
-  <span class="foot">
-    <span>
-      <span class="eyebrow block">{eyebrow}</span>
-      <span class="display name">{title}</span>
-    </span>
-    <Icon name="arrow-right" size={16} class="arrow shrink-0 text-[#111]" />
-  </span>
+  <Icon name={icon} size={20} class="text-[#111]" />
+  <div class="foot">
+    <h3 class="display name">{title}</h3>
+    <p class="body">{body}</p>
+    <CircleArrow size="sm" />
+  </div>
 </a>
 
 <style>
@@ -27,23 +26,35 @@ const { eyebrow, title, href, icon } = Astro.props;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    gap: var(--card-gap);
-    min-height: 140px;
-    padding: var(--card-pad);
+    gap: 18px;
+    min-height: 150px;
+    padding: 18px;
     border-radius: var(--radius-card);
   }
 
+  /* the arrow sits over the corner rather than in the text flow; inline it
+     squeezed the description onto a third line */
   .foot {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-    gap: 12px;
+    position: relative;
+    padding-right: 44px;
+  }
+
+  .foot > :global(.circle) {
+    position: absolute;
+    right: 0;
+    bottom: 0;
   }
 
   .name {
-    display: block;
-    margin-top: 4px;
-    font-size: 22px;
+    font-size: 19px;
     line-height: 1.15;
+  }
+
+  .body {
+    margin-top: 5px;
+    font-size: 12.5px;
+    line-height: 1.4;
+    max-width: 22ch;
+    color: var(--color-ink-2);
   }
 </style>

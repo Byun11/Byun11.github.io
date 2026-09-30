@@ -12,13 +12,9 @@ const all: { label: string; href: string; icon: IconName }[] = [
 ];
 const links = all.filter((l) => l.href);
 
-interface Props {
-  layout?: 'row' | 'grid';
-}
-const { layout = 'row' } = Astro.props;
 ---
 
-<ul class:list={['social', layout === 'grid' ? 'is-grid' : 'is-row']}>
+<ul class="social">
   {
     links.map((l) => (
       <li>
@@ -28,13 +24,8 @@ const { layout = 'row' } = Astro.props;
           rel="noopener noreferrer"
           class="glass group"
         >
-          <Icon name={l.icon} size={18} class="relative shrink-0 text-[#6e6e73]" />
-          <span class="relative">{l.label}</span>
-          <Icon
-            name="arrow-up-right"
-            size={16}
-            class="arrow relative ml-auto shrink-0 text-[#9a9a9f]"
-          />
+          <Icon name={l.icon} size={18} class="relative shrink-0 text-[#111]" />
+          <span class="relative label">{l.label}</span>
         </a>
       </li>
     ))
@@ -43,31 +34,23 @@ const { layout = 'row' } = Astro.props;
 
 <style>
   .social {
-    display: grid;
-    gap: 10px;
-  }
-
-  /* 2×2 on mobile — four labelled buttons never fit one row at 390px */
-  .social.is-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .social.is-row {
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    justify-content: start;
+    display: flex;
+    justify-content: center;
+    flex-wrap: nowrap;
+    gap: 5px;
   }
 
   .social a {
     display: flex;
     align-items: center;
-    gap: 10px;
-    height: var(--btn-h);
-    padding: 0 18px;
+    gap: 6px;
+    height: 44px;
+    padding: 0 9px;
     border-radius: var(--radius-pill);
-    font-size: 15px;
+    font-size: 12.5px;
     font-weight: 500;
     color: var(--color-ink);
+    white-space: nowrap;
     transition:
       transform 200ms ease,
       box-shadow 200ms ease;
@@ -80,12 +63,26 @@ const { layout = 'row' } = Astro.props;
       0 16px 38px rgba(21, 40, 74, 0.1);
   }
 
-  .social.is-row a {
-    gap: 8px;
+  /* below ~380px four labelled pills stop fitting; drop to icons */
+  @media (max-width: 379px) {
+    .social .label {
+      display: none;
+    }
+    .social a {
+      padding: 0 14px;
+    }
   }
 
-  /* the trailing arrow should not stretch a row-layout button */
-  .social.is-row a :global(.arrow) {
-    margin-left: 2px;
+  @media (min-width: 768px) {
+    .social {
+      justify-content: flex-start;
+      gap: 10px;
+    }
+    .social a {
+      height: var(--btn-h);
+      padding: 0 20px;
+      font-size: 15px;
+      gap: 9px;
+    }
   }
 </style>
