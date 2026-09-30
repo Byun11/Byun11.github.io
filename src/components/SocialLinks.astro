@@ -1,0 +1,43 @@
+---
+import { profile } from '../data/site';
+
+// A link with no URL yet is dropped entirely rather than rendered dead (§37).
+const all = [
+  { key: 'github', label: 'GitHub', href: profile.links.github, external: true },
+  { key: 'linkedin', label: 'LinkedIn', href: profile.links.linkedin, external: true },
+  { key: 'scholar', label: 'Scholar', href: profile.links.scholar, external: true },
+  { key: 'cv', label: 'CV', href: profile.links.cv, external: false },
+];
+const links = all.filter((l) => l.href);
+
+interface Props {
+  layout?: 'row' | 'grid';
+}
+const { layout = 'row' } = Astro.props;
+---
+
+<ul
+  class:list={[
+    layout === 'grid'
+      ? 'grid grid-cols-2 gap-2 sm:flex sm:flex-wrap'
+      : 'flex flex-wrap gap-2',
+  ]}
+>
+  {
+    links.map((l) => (
+      <li>
+        <a
+          href={l.href}
+          target={l.external ? '_blank' : undefined}
+          rel={l.external ? 'noopener noreferrer' : undefined}
+          class="glass group flex h-11 items-center justify-center gap-2 rounded-full px-[18px] text-[14px] font-medium text-[#111] transition-[transform,box-shadow] duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_36px_rgba(0,0,0,.09)] sm:justify-start"
+        >
+          <span class="relative">{l.label}</span>
+          <span class="arrow relative text-[#9a9a9f]" aria-hidden="true">
+            {l.external ? '↗' : '↓'}
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ul>

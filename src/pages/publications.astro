@@ -1,0 +1,85 @@
+---
+import Base from '../layouts/Base.astro';
+import { publications, profile } from '../data/site';
+
+const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+---
+
+<Base
+  title="Publications"
+  description="Papers on retrieval-augmented generation, document understanding, and LLM systems."
+>
+  <section
+    class="mx-auto max-w-[1280px] px-5 pb-[72px] pt-[132px] md:px-8 md:pb-[120px] md:pt-[190px]"
+  >
+    <h1 class="display text-[40px] leading-tight md:text-[64px]">Publications</h1>
+
+    <p class="mt-4 max-w-[60ch] text-[15px] leading-[1.6] text-[#6e6e73]">
+      Korean and English registrations of the same paper are listed once.
+      {
+        profile.links.scholar && (
+          <>
+            {' '}The complete record is on{' '}
+            <a
+              href={profile.links.scholar}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-[#111] underline underline-offset-4"
+            >
+              Google Scholar</a
+            >.
+          </>
+        )
+      }
+    </p>
+
+    <div class="mt-12 space-y-12 md:mt-16 md:space-y-16">
+      {
+        years.map((year) => (
+          <section>
+            <h2 class="eyebrow tabular-nums">{year}</h2>
+            <ul class="mt-4 border-t border-[rgba(0,0,0,.07)]">
+              {publications
+                .filter((p) => p.year === year)
+                .map((p) => (
+                  <li class="border-b border-[rgba(0,0,0,.07)] py-5 md:py-6">
+                    <h3 class="max-w-[72ch] text-[16px] leading-[1.45] text-[#111] md:text-[18px]">
+                      {p.url ? (
+                        <a
+                          href={p.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="underline decoration-[rgba(0,0,0,.18)] underline-offset-4 transition-colors hover:decoration-[#111]"
+                        >
+                          {p.title}
+                        </a>
+                      ) : (
+                        p.title
+                      )}
+                    </h3>
+
+                    <p class="mt-2 text-[14px] text-[#6e6e73]">
+                      {/* separator lives inside the span: sibling elements on
+                          separate lines would render a space before the comma */}
+                      {p.authors.map((a, i) => (
+                        <span
+                          class:list={[
+                            a === 'Jaeyeon Byun' || a === '변재연' ? 'text-[#111]' : '',
+                          ]}
+                        >{`${i > 0 ? ', ' : ''}${a}`}</span>
+                      ))}
+                    </p>
+
+                    <p class="mt-1 text-[14px] text-[#9a9a9f]">
+                      {p.venue}
+                      {p.doi && <> · doi:{p.doi}</>}
+                    </p>
+                  </li>
+                ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</Base>

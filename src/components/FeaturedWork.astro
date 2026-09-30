@@ -1,0 +1,74 @@
+---
+import StackPanel from './StackPanel.astro';
+import type { Project } from '../data/site';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+// §15 — a button only appears once the thing it points at exists.
+const actions = [
+  { label: 'Paper', href: project.links?.paper },
+  { label: 'Code', href: project.links?.code },
+  { label: 'Demo', href: project.links?.demo },
+].filter((a) => a.href);
+---
+
+<article
+  class="card flex flex-col overflow-hidden rounded-[30px] md:grid md:min-h-[400px] md:grid-cols-[45%_55%]"
+>
+  <!-- §24 — on mobile the visual sits in the lower half of the card, so it is
+       ordered second there and first (left column) from md up. -->
+  <StackPanel
+    steps={['Document', 'Selective Retrieval', 'Browser Agent', 'Web Form']}
+    caption="System sketch"
+    class="order-2 min-h-[200px] border-t border-[rgba(0,0,0,.07)] md:order-1 md:min-h-0 md:border-t-0 md:border-r"
+  />
+
+  <div class="order-1 flex flex-col justify-center gap-5 p-7 sm:p-10 md:order-2">
+    <p class="eyebrow">Featured Work</p>
+
+    <div class="space-y-2">
+      <h3 class="display text-[34px] leading-[1.05] sm:text-[42px]">
+        {project.title}
+      </h3>
+      <p class="text-[17px] text-[#6e6e73]">{project.subtitle}</p>
+    </div>
+
+    <p class="max-w-[46ch] text-[15px] leading-[1.6] text-[#6e6e73]">
+      {project.description}
+    </p>
+
+    <ul class="flex flex-wrap gap-1.5">
+      {
+        project.tags.map((t) => (
+          <li class="rounded-full border border-[rgba(0,0,0,.07)] px-3 py-1 text-[12px] text-[#6e6e73]">
+            {t}
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="flex flex-wrap items-center gap-2 pt-1">
+      {
+        actions.map((a) => (
+          <a
+            href={a.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="glass rounded-full px-4 py-2 text-[13px] font-medium transition-transform duration-200 hover:-translate-y-0.5"
+          >
+            <span class="relative">{a.label}</span>
+          </a>
+        ))
+      }
+      <a
+        href={`/work/${project.slug}`}
+        class="group ml-auto inline-flex items-center gap-1.5 text-[13px] font-medium text-[#111]"
+      >
+        Details <span class="arrow" aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+</article>

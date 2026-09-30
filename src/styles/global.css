@@ -1,0 +1,165 @@
+@import 'tailwindcss';
+
+/* ── Design tokens (spec §5, §33, §34) ───────────────────────────── */
+@theme {
+  --color-background: #f5f5f7;
+  --color-surface: rgba(255, 255, 255, 0.82);
+  --color-white: #ffffff;
+  --color-ink: #111111;
+  --color-ink-2: #6e6e73;
+  --color-ink-3: #9a9a9f;
+  --color-line: rgba(0, 0, 0, 0.07);
+  --color-glassline: rgba(255, 255, 255, 0.72);
+  --color-accent: #eaf0f8;
+
+  --font-sans: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Instrument Serif', Georgia, serif;
+
+  /* §33 — radii are a fixed set, not chosen ad hoc */
+  --radius-pill: 999px;
+  --radius-sm: 20px;
+  --radius-md: 24px;
+  --radius-lg: 30px;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: 'cv02', 'cv03', 'cv04';
+  -webkit-font-smoothing: antialiased;
+}
+
+/* A single very soft light source behind the page — the only gradient. */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(60% 45% at 78% 8%, rgba(234, 240, 248, 0.9), transparent 70%),
+    radial-gradient(45% 40% at 10% 0%, rgba(255, 255, 255, 0.9), transparent 65%);
+}
+
+/* ── Liquid glass (spec §32) ─────────────────────────────────────── */
+.glass {
+  position: relative;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.72),
+    rgba(255, 255, 255, 0.42)
+  );
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.55),
+    transparent 35%
+  );
+  pointer-events: none;
+}
+
+/* Header uses a lighter mix than content glass (§8). */
+.glass-bar {
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
+    0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+/* Plain white content card — §16 says these should NOT all be glass. */
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-line);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+}
+
+/* ── Type helpers ────────────────────────────────────────────────── */
+.eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+/* ── Motion (spec §31) ───────────────────────────────────────────── */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.rise {
+  animation: rise 500ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.arrow {
+  transition: transform 200ms ease;
+}
+
+.group:hover .arrow {
+  transform: translateX(3px);
+}
+
+/* §41 — respect the OS setting, do not just shorten the duration. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* §41 — visible focus, never removed. */
+:focus-visible {
+  outline: 2px solid #111;
+  outline-offset: 3px;
+  border-radius: 6px;
+}

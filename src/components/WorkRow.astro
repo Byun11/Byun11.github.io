@@ -1,0 +1,44 @@
+---
+import type { Project } from '../data/site';
+
+interface Props {
+  project: Project;
+  compact?: boolean;
+}
+const { project, compact = false } = Astro.props;
+
+// A row is clickable only when a detail page was actually generated for it,
+// so the list never contains a link to a 404.
+const hasDetail = Boolean(project.detail?.length);
+const Tag = hasDetail ? 'a' : 'div';
+const rowClass = [
+  'grid grid-cols-[auto_1fr_auto] items-baseline gap-x-5 border-b border-[rgba(0,0,0,.07)] md:gap-x-8',
+  compact ? 'py-5' : 'py-6 md:py-8',
+  hasDetail ? 'group transition-colors hover:bg-white/50' : '',
+].join(' ');
+---
+
+<li>
+  <Tag class={rowClass} href={hasDetail ? `/work/${project.slug}` : undefined}>
+    <span class="text-[12px] tabular-nums text-[#9a9a9f]">{project.index}</span>
+
+    <span>
+      <span
+        class:list={[
+          'block leading-tight',
+          compact ? 'text-[17px] md:text-[19px]' : 'display text-[24px] md:text-[32px]',
+        ]}
+      >
+        {project.title}
+      </span>
+      <span class="mt-1 block text-[14px] text-[#6e6e73] md:text-[15px]">
+        {project.subtitle}
+      </span>
+    </span>
+
+    <span class="flex items-center gap-4 text-[13px] text-[#9a9a9f]">
+      <span class="tabular-nums">{project.year}</span>
+      {hasDetail && <span class="arrow text-[#111]" aria-hidden="true">→</span>}
+    </span>
+  </Tag>
+</li>
