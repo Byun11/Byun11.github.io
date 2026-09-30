@@ -118,20 +118,20 @@ export const projects: readonly Project[] = [
     subtitle: 'Scientific information tools for LLM agents',
     blurb: 'Connecting LLM agents to Korean science and R&D information.',
     description:
-      'An MCP server that connects LLM clients to KISTI ScienceON and NTIS OpenAPIs.',
+      'An MCP server that connects LLM clients to the KISTI ScienceON, NTIS and DataON OpenAPIs.',
     year: 2025,
     tags: ['MCP', 'ScienceON', 'NTIS'],
     organization: 'KISTI',
     team: 'AI Platform Team',
-    // github: repository URL not confirmed yet
+    github: 'https://github.com/ansua79/kisti-mcp',
     detail: [
       {
         heading: 'Overview',
-        body: 'An MCP server that connects LLM clients to KISTI ScienceON and NTIS OpenAPIs, exposing ten tools in the current public version.',
+        body: 'An MCP server that connects LLM clients to the OpenAPIs behind KISTI ScienceON, NTIS and DataON, exposing 32 tools in the current public version.',
       },
       {
         heading: 'Tools',
-        body: 'Paper, patent and research-report search over ScienceON; R&D project search over NTIS; science and technology classification; and related-content recommendation.',
+        body: 'Paper, patent and research-report search, citations, researcher and institution lookup over ScienceON; national R&D project and outcome search, classification codes and related-content recommendation over NTIS; and research-data search over DataON. NTIS project and outcome search fall back automatically from agency-level to public endpoints according to the key’s entitlement.',
       },
     ],
   },
