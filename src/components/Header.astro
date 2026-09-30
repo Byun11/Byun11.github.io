@@ -149,6 +149,18 @@ const isCurrent = (href: string) =>
     border-radius: 999px;
   }
 
+  /* Condensed, the bar floats over body text. At the shared 55% white the
+     text read straight through the button, so it gets a denser mix and a
+     heavier blur: the colour behind still shows, the words do not. */
+  :global(#site-header.is-condensed) .mbar {
+    background: rgba(255, 255, 255, 0.82);
+    backdrop-filter: blur(30px) saturate(180%);
+    -webkit-backdrop-filter: blur(30px) saturate(180%);
+    box-shadow:
+      0 1px 2px rgba(21, 40, 74, 0.04),
+      0 10px 26px rgba(21, 40, 74, 0.1);
+  }
+
   /* the bar itself is the control once condensed; a glass pill inside a
      glass pill was what made it read as a floating blob */
   :global(#site-header.is-condensed) .mbar-btn {
