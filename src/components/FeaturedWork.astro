@@ -1,0 +1,151 @@
+---
+import { Image } from 'astro:assets';
+import CircleArrow from './CircleArrow.astro';
+import koniWide from '../assets/koni-visual-wide.png';
+import koniTall from '../assets/koni-visual-tall.png';
+import type { Project } from '../data/site';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+// The whole card is the link. The visual is the card's background bleeding
+// in from the right rather than a panel stacked under the text, which is
+// what made the card three times taller than it should be.
+const href = project.detail?.length ? `/work/${project.slug}` : project.github;
+---
+
+<a class="card feature group" href={href}>
+  <div class="art" aria-hidden="true">
+    <Image class="tall" src={koniTall} alt="" widths={[520, 900]} sizes="100vw" loading="eager" />
+    <Image
+      class="wide"
+      src={koniWide}
+      alt=""
+      widths={[760, 1200, 1600]}
+      sizes="(min-width: 768px) 70vw, 100vw"
+      loading="eager"
+    />
+  </div>
+
+  <div class="copy">
+    <p class="eyebrow">Featured</p>
+    <h3 class="display title">{project.title}</h3>
+    <p class="sub">{project.subtitle}</p>
+    <p class="blurb">{project.blurb}</p>
+  </div>
+
+  <CircleArrow />
+</a>
+
+<style>
+  .feature {
+    position: relative;
+    display: block;
+    min-height: 270px;
+    padding: 22px;
+    overflow: hidden;
+    border-radius: var(--radius-feature);
+    background: transparent;
+  }
+
+  .art {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+
+  .art :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center right;
+    /* crop the border plate baked into the artwork */
+    transform: scale(1.16);
+  }
+
+  .art :global(.wide) {
+    display: none;
+  }
+
+  /* keep the left edge of the art from cutting hard across the card */
+  .art::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      rgba(255, 255, 255, 0.96) 12%,
+      rgba(255, 255, 255, 0.78) 38%,
+      rgba(255, 255, 255, 0.12) 62%,
+      transparent 76%
+    );
+  }
+
+  .copy {
+    position: relative;
+    max-width: 60%;
+  }
+
+  .title {
+    margin-top: 10px;
+    font-size: 30px;
+    line-height: 1.05;
+  }
+
+  .sub {
+    margin-top: 6px;
+    font-size: 14px;
+    line-height: 1.35;
+    color: var(--color-ink-2);
+  }
+
+  .blurb {
+    margin-top: 10px;
+    max-width: 24ch;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
+  .feature > :global(.circle) {
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .feature {
+      min-height: 330px;
+      padding: 40px;
+    }
+
+
+    .art :global(.tall) {
+      display: none;
+    }
+
+    .art :global(.wide) {
+      display: block;
+    }
+
+    .title {
+      font-size: 44px;
+    }
+
+    .sub {
+      font-size: 17px;
+    }
+
+    .blurb {
+      margin-top: 14px;
+      font-size: 15px;
+    }
+
+    .feature > :global(.circle) {
+      right: 32px;
+      bottom: 32px;
+    }
+  }
+</style>

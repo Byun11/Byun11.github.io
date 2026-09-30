@@ -1,0 +1,23 @@
+{
+  "name": "byun11-site",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "astro": "^5.6.1",
+    "lucide-static": "^0.487.0",
+    "tailwindcss": "^4.1.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "sharp": "^0.35.5",
+    "typescript": "^5.8.3"
+  }
+}

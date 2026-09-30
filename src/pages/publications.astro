@@ -1,0 +1,170 @@
+---
+import Base from '../layouts/Base.astro';
+import { publications, PUB_GROUPS, profile } from '../data/site';
+
+const groups = PUB_GROUPS.map((g) => ({
+  ...g,
+  items: publications
+    .filter((p) => p.venueIndex === g.key)
+    .sort((a, b) => b.year - a.year),
+})).filter((g) => g.items.length > 0);
+---
+
+<Base
+  title="Publications"
+  description="Peer-reviewed work on retrieval-augmented generation, document understanding and applied vision."
+>
+  <section class="page">
+    <h1 class="display heading">Publications</h1>
+
+    <p class="intro">
+      Grouped by indexing. Korean and English registrations of the same paper
+      are listed once.
+      {
+        profile.links.scholar && (
+          <>
+            {' '}The full record is on{' '}
+            <a href={profile.links.scholar} target="_blank" rel="noopener noreferrer">Google Scholar</a>.
+          </>
+        )
+      }
+    </p>
+
+    <div class="groups">
+      {
+        groups.map((g) => (
+          <section>
+            <h2 class="eyebrow">{g.label}</h2>
+            <ul class="list">
+              {g.items.map((p) => (
+                <li class="item">
+                  <h3 class="title">
+                    {p.url ? (
+                      <a href={p.url} target="_blank" rel="noopener noreferrer">
+                        {p.title}
+                      </a>
+                    ) : (
+                      p.title
+                    )}
+                  </h3>
+
+                  <p class="authors">
+                    {p.authors.map((a, i) => (
+                      <span
+                        class:list={[a === 'Jaeyeon Byun' || a === '변재연' ? 'me' : '']}
+                      >{`${i > 0 ? ', ' : ''}${a}`}</span>
+                    ))}
+                  </p>
+
+                  <p class="venue">
+                    {p.venue} · {p.year}
+                    {p.doi && <span class="doi">doi:{p.doi}</span>}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 132px var(--gutter) var(--section-gap);
+  }
+
+  .heading {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .intro {
+    margin-top: 16px;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+  }
+
+  .intro a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .groups {
+    display: grid;
+    gap: 48px;
+    margin-top: 48px;
+  }
+
+  .list {
+    margin-top: 14px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .title {
+    max-width: 72ch;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .title a {
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.18);
+    text-underline-offset: 4px;
+  }
+
+  .title a:hover {
+    text-decoration-color: var(--color-ink);
+  }
+
+  .authors {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--color-ink-2);
+  }
+
+  .authors .me {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .venue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--color-ink-3);
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: 190px 32px 120px;
+    }
+
+    .heading {
+      font-size: 64px;
+    }
+
+    .groups {
+      gap: 64px;
+      margin-top: 64px;
+    }
+
+    .title {
+      font-size: 18px;
+    }
+  }
+</style>

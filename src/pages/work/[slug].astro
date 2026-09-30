@@ -1,0 +1,223 @@
+---
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import koniWide from '../../assets/koni-visual-wide.png';
+import { projects } from '../../data/site';
+
+export function getStaticPaths() {
+  return projects
+    .filter((p) => p.detail?.length)
+    .map((p) => ({ params: { slug: p.slug }, props: { project: p } }));
+}
+
+const { project } = Astro.props;
+
+// The artwork is KONI's system sketch; it is not a generic decoration, so it
+// only appears on that project.
+const hero = project.slug === 'koni-forms' ? koniWide : undefined;
+
+const links = [
+  { label: 'Paper', href: project.paper },
+  { label: 'Code', href: project.github },
+  { label: 'Demo', href: project.demo },
+].filter((l) => l.href);
+
+const credit = [project.organization, project.team].filter(Boolean).join(' · ');
+---
+
+<Base title={project.title} description={project.subtitle}>
+  <article class="page">
+    <a href="/work" class="back">
+      <Icon name="arrow-left" size={16} />
+      Work
+    </a>
+
+    <header class="head">
+      <h1 class="display title">{project.title}</h1>
+      <p class="sub">{project.subtitle}</p>
+      <p class="desc">{project.description}</p>
+
+      <p class="meta">
+        <span>{project.tags.slice(0, 3).join(' · ')}</span>
+        <span class="dot" aria-hidden="true">·</span>
+        <span>{project.year}</span>
+        {
+          credit && (
+            <>
+              <span class="dot" aria-hidden="true">·</span>
+              <span>{credit}</span>
+            </>
+          )
+        }
+      </p>
+    </header>
+
+    {
+      hero && (
+        <div class="art card">
+          <Image src={hero} alt="" widths={[760, 1200, 1600]} sizes="(min-width: 768px) 80vw, 100vw" loading="eager" />
+        </div>
+      )
+    }
+
+    <div class="body">
+      <div class="sections">
+        {
+          project.detail!.map((s) => (
+            <section>
+              <h2 class="eyebrow">{s.heading}</h2>
+              <p>{s.body}</p>
+            </section>
+          ))
+        }
+      </div>
+
+      {
+        links.length > 0 && (
+          <aside>
+            <h2 class="eyebrow">Links</h2>
+            <ul>
+              {links.map((l) => (
+                <li>
+                  <a href={l.href} target="_blank" rel="noopener noreferrer" class="glass pill group">
+                    <span class="relative">{l.label}</span>
+                    <Icon name="arrow-up-right" size={16} class="arrow relative text-[#9a9a9f]" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )
+      }
+    </div>
+  </article>
+</Base>
+
+<style>
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 132px var(--gutter) var(--section-gap);
+  }
+
+  .back {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--color-ink-2);
+  }
+
+  .back:hover {
+    color: var(--color-ink);
+  }
+
+  .head {
+    margin-top: 28px;
+    max-width: 800px;
+  }
+
+  .title {
+    font-size: 40px;
+    line-height: 1.02;
+  }
+
+  .sub {
+    margin-top: 10px;
+    font-size: 18px;
+    color: var(--color-ink-2);
+  }
+
+  .desc {
+    margin-top: 16px;
+    max-width: 56ch;
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    font-size: 12px;
+    color: var(--color-ink-3);
+  }
+
+  .art {
+    margin-top: 40px;
+    overflow: hidden;
+    border-radius: var(--radius-feature);
+  }
+
+  .art :global(img) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  .body {
+    display: grid;
+    gap: 40px;
+    margin-top: 48px;
+  }
+
+  .sections {
+    display: grid;
+    gap: 32px;
+    max-width: 640px;
+  }
+
+  .sections p {
+    margin-top: 10px;
+    font-size: 16px;
+    line-height: 1.65;
+  }
+
+  aside ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 44px;
+    padding: 0 18px;
+    border-radius: var(--radius-pill);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-ink);
+    transition: transform 200ms ease;
+  }
+
+  .pill:hover {
+    transform: translateY(-2px);
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: 190px 32px 120px;
+    }
+
+    .title {
+      font-size: 68px;
+    }
+
+    .sub {
+      font-size: 22px;
+    }
+
+    .body {
+      grid-template-columns: minmax(0, 640px) 1fr;
+      gap: 64px;
+      margin-top: 72px;
+    }
+  }
+</style>

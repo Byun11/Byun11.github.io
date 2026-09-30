@@ -1,0 +1,46 @@
+---
+import Base from '../../layouts/Base.astro';
+import WorkRow from '../../components/WorkRow.astro';
+import { projects } from '../../data/site';
+---
+
+<Base title="Work" description="Selected work: document-grounded agents and scientific information systems.">
+  <section class="page">
+    <h1 class="display heading">Selected Work</h1>
+    <ul class="list">
+      {projects.map((p) => <WorkRow project={p} />)}
+    </ul>
+  </section>
+</Base>
+
+<style>
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 132px var(--gutter) var(--section-gap);
+  }
+
+  .heading {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .list {
+    margin-top: 40px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: 190px 32px 120px;
+    }
+
+    .heading {
+      font-size: 64px;
+    }
+
+    .list {
+      margin-top: 56px;
+    }
+  }
+</style>

@@ -1,0 +1,112 @@
+---
+import Icon from '../components/Icon.astro';
+import type { Project } from '../data/site';
+
+interface Props {
+  project: Project;
+}
+const { project } = Astro.props;
+
+// Clickable only where a detail page was generated, so the list never links
+// to a 404.
+const hasDetail = Boolean(project.detail?.length);
+const Tag = hasDetail ? 'a' : 'div';
+
+// Small metadata, never a claim of sole authorship.
+const credit = [project.organization, project.team].filter(Boolean).join(' · ');
+---
+
+<li>
+  <Tag class="row group" href={hasDetail ? `/work/${project.slug}` : undefined}>
+    <span class="idx">{project.index}</span>
+
+    <span class="main">
+      <span class="display name">{project.title}</span>
+      <span class="sub">{project.subtitle}</span>
+      <span class="meta">
+        <span>{project.tags.slice(0, 3).join(' · ')}</span>
+        {credit && <span class="credit">{credit}</span>}
+      </span>
+    </span>
+
+    <span class="end">
+      <span class="year">{project.year}</span>
+      {hasDetail && <Icon name="arrow-right" size={16} class="arrow text-[#111]" />}
+    </span>
+  </Tag>
+</li>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: baseline;
+    column-gap: 20px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  a.row {
+    transition: background-color 200ms ease;
+  }
+
+  a.row:hover {
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .idx,
+  .year {
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-ink-3);
+  }
+
+  .name {
+    display: block;
+    font-size: 24px;
+    line-height: 1.15;
+  }
+
+  .sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 14px;
+    color: var(--color-ink-2);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 12px;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--color-ink-3);
+  }
+
+  /* tags and the institutional credit read as one run without a divider */
+  .credit {
+    padding-left: 12px;
+    border-left: 1px solid var(--color-line);
+  }
+
+  .end {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  @media (min-width: 768px) {
+    .row {
+      column-gap: 32px;
+      padding: 32px 0;
+    }
+
+    .name {
+      font-size: 32px;
+    }
+
+    .sub {
+      font-size: 15px;
+    }
+  }
+</style>

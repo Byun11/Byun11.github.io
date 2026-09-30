@@ -1,0 +1,33 @@
+---
+import Icon from './Icon.astro';
+
+// The round glass affordance the mockup uses everywhere a card leads
+// somewhere — replaces the bare arrow glyphs.
+interface Props {
+  size?: 'sm' | 'md';
+}
+const { size = 'md' } = Astro.props;
+---
+
+<span class:list={['circle glass', size]}>
+  <Icon name="arrow-right" size={16} class="arrow relative text-[#111]" />
+</span>
+
+<style>
+  .circle {
+    display: inline-grid;
+    place-items: center;
+    flex-shrink: 0;
+    border-radius: 999px;
+  }
+
+  .circle.md {
+    width: 44px;
+    height: 44px;
+  }
+
+  .circle.sm {
+    width: 36px;
+    height: 36px;
+  }
+</style>

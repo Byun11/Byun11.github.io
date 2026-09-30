@@ -1,0 +1,44 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <p class="tagline">
+    <span class="rule" aria-hidden="true"></span>
+    Building more capable and helpful AI agents
+    <span class="rule" aria-hidden="true"></span>
+  </p>
+  <p class="copy">© {year} Jaeyeon Byun</p>
+</footer>
+
+<style>
+  footer {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 48px var(--gutter) 40px;
+    text-align: center;
+  }
+
+  .tagline {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--color-ink-3);
+  }
+
+  .rule {
+    height: 1px;
+    width: clamp(28px, 12vw, 96px);
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  .copy {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--color-ink-3);
+  }
+</style>
