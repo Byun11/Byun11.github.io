@@ -42,9 +42,9 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
 <style>
   .feature {
     position: relative;
-    display: block;
-    min-height: 270px;
-    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
     overflow: hidden;
     border-radius: var(--radius-feature);
     background: transparent;
@@ -89,20 +89,20 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
   }
 
   .title {
-    margin-top: 10px;
-    font-size: 30px;
+    margin-top: 8px;
+    font-size: 28px;
     line-height: 1.05;
   }
 
   .sub {
-    margin-top: 6px;
+    margin-top: 5px;
     font-size: 14px;
     line-height: 1.35;
     color: var(--color-ink-2);
   }
 
   .blurb {
-    margin-top: 10px;
+    margin-top: 8px;
     max-width: 24ch;
     font-size: 13px;
     line-height: 1.45;
@@ -110,14 +110,14 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
   }
 
   .feature > :global(.circle) {
-    position: absolute;
-    right: 20px;
-    bottom: 20px;
+    align-self: flex-end;
+    margin-top: 16px;
   }
 
   @media (min-width: 768px) {
     .feature {
-      min-height: 330px;
+      min-height: 300px;
+      justify-content: center;
       padding: 40px;
     }
 
@@ -144,8 +144,10 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.github;
     }
 
     .feature > :global(.circle) {
+      position: absolute;
       right: 32px;
       bottom: 32px;
+      margin-top: 0;
     }
   }
 </style>
