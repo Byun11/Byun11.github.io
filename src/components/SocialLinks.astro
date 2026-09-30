@@ -4,13 +4,14 @@ import type { IconName } from '../lib/icons';
 import { profile } from '../data/site';
 
 // A link with no URL yet is dropped rather than rendered dead.
-const all: { label: string; href: string; icon: IconName }[] = [
+const all: { label: string; href: string | null; icon: IconName }[] = [
   { label: 'GitHub', href: profile.links.github, icon: 'github' },
   { label: 'LinkedIn', href: profile.links.linkedin, icon: 'linkedin' },
   { label: 'Scholar', href: profile.links.scholar, icon: 'graduation-cap' },
+  // appears on its own once profile.links.cv is set
   { label: 'CV', href: profile.links.cv, icon: 'file-text' },
 ];
-const links = all.filter((l) => l.href);
+const links = all.filter((l) => Boolean(l.href));
 
 ---
 
@@ -19,7 +20,7 @@ const links = all.filter((l) => l.href);
     links.map((l) => (
       <li>
         <a
-          href={l.href}
+          href={l.href!}
           target="_blank"
           rel="noopener noreferrer"
           class="glass group"

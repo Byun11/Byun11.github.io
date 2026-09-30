@@ -12,9 +12,9 @@ export const profile = {
     'I build AI agents that work with documents and the web.',
   links: {
     github: 'https://github.com/Byun11',
-    linkedin: '', // TODO: fill in
+    linkedin: 'https://www.linkedin.com/in/jaeyeon-byun-046814326',
     scholar: 'https://scholar.google.com/citations?user=oITFr4IAAAAJ&hl=ko',
-    cv: '', // TODO: Google Docs share link
+    cv: null as string | null, // Google Docs or PDF URL; the button appears once set
     email: '',
   },
 } as const;
@@ -31,18 +31,27 @@ export type Project = {
   index: string;
   title: string;
   subtitle: string;
-  blurb: string;       // one line, for the home card
-  description: string; // full version, detail page only
+  /** one line, for the home card and the project list */
+  blurb: string;
+  /** one to two lines, for the project detail header */
+  description: string;
   year: number;
   tags: readonly string[];
   featured?: boolean;
-  exploration?: boolean; // spec §26 — kept off the home page
-  links?: { code?: string; paper?: string; demo?: string };
-  // §28 — a detail page is only generated when there is real content for it.
-  // No placeholder case studies and no invented Results section.
+  /** Institutional context. Shown as small metadata so a team project is
+      never presented as solo work. */
+  organization?: string;
+  team?: string;
+  role?: string;
+  github?: string;
+  demo?: string;
+  paper?: string;
+  /** §28 — a detail page exists only where there is real content for it. */
   detail?: readonly { heading: string; body: string }[];
 };
 
+// Only projects that are public or have a real system behind them. Exploratory
+// work is deliberately not listed here.
 export const projects: readonly Project[] = [
   {
     slug: 'koni-forms',
@@ -51,15 +60,14 @@ export const projects: readonly Project[] = [
     subtitle: 'Document-grounded browser agent',
     blurb: 'Selective document access for real-world web forms.',
     description:
-      'An in-browser AI agent that selectively retrieves information from attached documents and completes real-world web forms — and asks the user when the document does not settle a value, instead of fabricating one.',
+      'An in-browser agent that selectively retrieves information from attached documents and completes real-world web forms.',
     year: 2026,
-    tags: ['Web Agents', 'Document AI', 'Browser Agents', 'Human-in-the-loop'],
+    tags: ['Web Agents', 'Document AI', 'Browser Agents'],
     featured: true,
-    links: {
-      code: 'https://github.com/Byun11/KONI-Forms',
-      demo: 'https://github.com/Byun11/KONI-Forms/releases/latest',
-      // paper: hidden until the EACL 2027 demo paper is public (spec §15)
-    },
+    organization: 'KISTI',
+    github: 'https://github.com/Byun11/KONI-Forms',
+    demo: 'https://github.com/Byun11/KONI-Forms/releases/latest',
+    // paper: hidden until the EACL 2027 demo paper is public
     detail: [
       {
         heading: 'Overview',
@@ -75,32 +83,57 @@ export const projects: readonly Project[] = [
       },
       {
         heading: 'Key mechanism',
-        body: 'A value the document does not settle becomes a question to the user, not a guess. This user-intervention loop is what separates a transfer tool from a plausible-text generator, and it is the part of the design the evaluation is built around.',
+        body: 'A value the document does not settle becomes a question to the user, not a guess. This user-intervention loop is what separates a transfer tool from a plausible-text generator.',
       },
     ],
   },
   {
-    slug: 'moe-expert-transplant',
+    slug: 'dorea',
     index: '02',
-    title: 'MoE Expert Transplant',
-    subtitle: 'Cross-model expert representation experiments',
-    blurb: 'What survives when an expert moves between models.',
+    title: 'Dorea',
+    subtitle: 'Interactive PDF intelligence',
+    blurb: 'Talk to PDFs by selecting the exact region that matters.',
     description:
-      'Transplanting capability-bearing experts between Mixture-of-Experts models, and measuring what survives the move across differing representation spaces.',
-    year: 2026,
-    tags: ['LLM Systems', 'Mixture of Experts', 'Representation'],
+      'A layout-aware PDF analysis system for region-grounded question answering and document interaction.',
+    year: 2025,
+    tags: ['Document AI', 'RAG'],
+    organization: 'KISTI',
+    team: 'AI Platform Team',
+    github: 'https://github.com/Byun11/Dorea-pdf-ai',
+    detail: [
+      {
+        heading: 'Overview',
+        body: 'Dorea is a layout-aware PDF analysis system for region-grounded question answering and document interaction.',
+      },
+      {
+        heading: 'Key mechanism',
+        body: 'The document is first parsed for layout; the reader then selects a specific region of the page, and that selection grounds the conversation. The answer is tied to the part of the document the reader pointed at, rather than to whatever a retriever happened to return.',
+      },
+    ],
   },
   {
-    slug: 'flyvl',
+    slug: 'kisti-mcp',
     index: '03',
-    title: 'FlyVL',
-    subtitle: 'Connectome-derived visual encoders',
-    blurb: 'A fly brain wiring diagram, used as a vision encoder.',
+    title: 'KISTI-MCP',
+    subtitle: 'Scientific information tools for LLM agents',
+    blurb: 'Connecting LLM agents to Korean science and R&D information.',
     description:
-      'Using the Drosophila MaleCNS connectome as a visual encoder — an ongoing set of experiments, controls, and negative results rather than a finished system.',
-    year: 2026,
-    tags: ['Multimodal AI', 'Neuro-inspired', 'Exploratory'],
-    exploration: true,
+      'An MCP server that connects LLM clients to KISTI ScienceON and NTIS OpenAPIs.',
+    year: 2025,
+    tags: ['MCP', 'ScienceON', 'NTIS'],
+    organization: 'KISTI',
+    team: 'AI Platform Team',
+    // github: repository URL not confirmed yet
+    detail: [
+      {
+        heading: 'Overview',
+        body: 'An MCP server that connects LLM clients to KISTI ScienceON and NTIS OpenAPIs, exposing ten tools in the current public version.',
+      },
+      {
+        heading: 'Tools',
+        body: 'Paper, patent and research-report search over ScienceON; R&D project search over NTIS; science and technology classification; and related-content recommendation.',
+      },
+    ],
   },
 ];
 

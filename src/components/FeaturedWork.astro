@@ -13,7 +13,7 @@ const { project } = Astro.props;
 // The whole card is the link. The visual is the card's background bleeding
 // in from the right rather than a panel stacked under the text, which is
 // what made the card three times taller than it should be.
-const href = project.detail?.length ? `/work/${project.slug}` : project.links?.code;
+const href = project.detail?.length ? `/work/${project.slug}` : project.github;
 ---
 
 <a class="card feature group" href={href}>
@@ -33,6 +33,7 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.links?.c
     <p class="eyebrow">Featured</p>
     <h3 class="display title">{project.title}</h3>
     <p class="sub">{project.subtitle}</p>
+    <p class="blurb">{project.blurb}</p>
   </div>
 
   <CircleArrow />
@@ -100,6 +101,14 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.links?.c
     color: var(--color-ink-2);
   }
 
+  .blurb {
+    margin-top: 10px;
+    max-width: 24ch;
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--color-ink-2);
+  }
+
   .feature > :global(.circle) {
     position: absolute;
     right: 20px;
@@ -127,6 +136,11 @@ const href = project.detail?.length ? `/work/${project.slug}` : project.links?.c
 
     .sub {
       font-size: 17px;
+    }
+
+    .blurb {
+      margin-top: 14px;
+      font-size: 15px;
     }
 
     .feature > :global(.circle) {
