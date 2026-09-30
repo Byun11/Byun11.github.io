@@ -1,81 +1,68 @@
 ---
 import Base from '../layouts/Base.astro';
-import { publications, profile } from '../data/site';
+import { publications, PUB_GROUPS, profile } from '../data/site';
 
-const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a);
+const groups = PUB_GROUPS.map((g) => ({
+  ...g,
+  items: publications
+    .filter((p) => p.venueIndex === g.key)
+    .sort((a, b) => b.year - a.year),
+})).filter((g) => g.items.length > 0);
 ---
 
 <Base
   title="Publications"
-  description="Papers on retrieval-augmented generation, document understanding, and LLM systems."
+  description="Peer-reviewed work on retrieval-augmented generation, document understanding and applied vision."
 >
-  <section
-    class="mx-auto max-w-[1280px] px-5 pb-[72px] pt-[132px] md:px-8 md:pb-[120px] md:pt-[190px]"
-  >
-    <h1 class="display text-[40px] leading-tight md:text-[64px]">Publications</h1>
+  <section class="page">
+    <h1 class="display heading">Publications</h1>
 
-    <p class="mt-4 max-w-[60ch] text-[15px] leading-[1.6] text-[#6e6e73]">
-      Korean and English registrations of the same paper are listed once.
+    <p class="intro">
+      Grouped by indexing. Korean and English registrations of the same paper
+      are listed once.
       {
         profile.links.scholar && (
           <>
-            {' '}The complete record is on{' '}
-            <a
-              href={profile.links.scholar}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="text-[#111] underline underline-offset-4"
-            >
-              Google Scholar</a
-            >.
+            {' '}The full record is on{' '}
+            <a href={profile.links.scholar} target="_blank" rel="noopener noreferrer">Google Scholar</a>.
           </>
         )
       }
     </p>
 
-    <div class="mt-12 space-y-12 md:mt-16 md:space-y-16">
+    <div class="groups">
       {
-        years.map((year) => (
+        groups.map((g) => (
           <section>
-            <h2 class="eyebrow tabular-nums">{year}</h2>
-            <ul class="mt-4 border-t border-[rgba(0,0,0,.07)]">
-              {publications
-                .filter((p) => p.year === year)
-                .map((p) => (
-                  <li class="border-b border-[rgba(0,0,0,.07)] py-5 md:py-6">
-                    <h3 class="max-w-[72ch] text-[16px] leading-[1.45] text-[#111] md:text-[18px]">
-                      {p.url ? (
-                        <a
-                          href={p.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          class="underline decoration-[rgba(0,0,0,.18)] underline-offset-4 transition-colors hover:decoration-[#111]"
-                        >
-                          {p.title}
-                        </a>
-                      ) : (
-                        p.title
-                      )}
-                    </h3>
+            <h2 class="eyebrow">{g.label}</h2>
+            <ul class="list">
+              {g.items.map((p) => (
+                <li class="item">
+                  <h3 class="title">
+                    {p.url ? (
+                      <a href={p.url} target="_blank" rel="noopener noreferrer">
+                        {p.title}
+                      </a>
+                    ) : (
+                      p.title
+                    )}
+                  </h3>
 
-                    <p class="mt-2 text-[14px] text-[#6e6e73]">
-                      {/* separator lives inside the span: sibling elements on
-                          separate lines would render a space before the comma */}
-                      {p.authors.map((a, i) => (
-                        <span
-                          class:list={[
-                            a === 'Jaeyeon Byun' || a === '변재연' ? 'text-[#111]' : '',
-                          ]}
-                        >{`${i > 0 ? ', ' : ''}${a}`}</span>
-                      ))}
-                    </p>
+                  <p class="authors">
+                    {p.authors.map((a, i) => (
+                      <span
+                        class:list={[a === 'Jaeyeon Byun' || a === '변재연' ? 'me' : '']}
+                      >{`${i > 0 ? ', ' : ''}${a}`}</span>
+                    ))}
+                  </p>
 
-                    <p class="mt-1 text-[14px] text-[#9a9a9f]">
-                      {p.venue}
-                      {p.doi && <> · doi:{p.doi}</>}
-                    </p>
-                  </li>
-                ))}
+                  <p class="venue">
+                    {p.venue} · {p.year}
+                    {p.quartile && <span class="badge">{p.quartile}</span>}
+                    {p.doi && <span class="doi">doi:{p.doi}</span>}
+                  </p>
+                </li>
+              ))}
             </ul>
           </section>
         ))
@@ -83,3 +70,110 @@ const years = [...new Set(publications.map((p) => p.year))].sort((a, b) => b - a
     </div>
   </section>
 </Base>
+
+<style>
+  .page {
+    max-width: 1280px;
+    margin-inline: auto;
+    padding: 132px var(--gutter) var(--section-gap);
+  }
+
+  .heading {
+    font-size: 40px;
+    line-height: 1.1;
+  }
+
+  .intro {
+    margin-top: 16px;
+    max-width: 60ch;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-ink-2);
+  }
+
+  .intro a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+
+  .groups {
+    display: grid;
+    gap: 48px;
+    margin-top: 48px;
+  }
+
+  .list {
+    margin-top: 14px;
+    border-top: 1px solid var(--color-line);
+  }
+
+  .item {
+    padding: 20px 0;
+    border-bottom: 1px solid var(--color-line);
+  }
+
+  .title {
+    max-width: 72ch;
+    font-size: 16px;
+    line-height: 1.45;
+  }
+
+  .title a {
+    text-decoration: underline;
+    text-decoration-color: rgba(0, 0, 0, 0.18);
+    text-underline-offset: 4px;
+  }
+
+  .title a:hover {
+    text-decoration-color: var(--color-ink);
+  }
+
+  .authors {
+    margin-top: 8px;
+    font-size: 14px;
+    color: var(--color-ink-2);
+  }
+
+  .authors .me {
+    color: var(--color-ink);
+    font-weight: 500;
+  }
+
+  .venue {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 13px;
+    color: var(--color-ink-3);
+  }
+
+  .badge {
+    padding: 1px 7px;
+    border: 1px solid var(--color-line);
+    border-radius: 999px;
+    font-size: 11px;
+    color: var(--color-ink-2);
+  }
+
+  @media (min-width: 768px) {
+    .page {
+      padding: 190px 32px 120px;
+    }
+
+    .heading {
+      font-size: 64px;
+    }
+
+    .groups {
+      gap: 64px;
+      margin-top: 64px;
+    }
+
+    .title {
+      font-size: 18px;
+    }
+  }
+</style>

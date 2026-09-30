@@ -11,7 +11,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
-const pageTitle = title ? `${title} — Jaeyeon Byun` : seo.title;
+const pageTitle = title ? `${title} · Jaeyeon Byun` : 'Jaeyeon Byun';
 const pageDesc = description ?? seo.description;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const ogImage = new URL(seo.ogImage, Astro.site).href;
@@ -26,8 +26,12 @@ const ogImage = new URL(seo.ogImage, Astro.site).href;
     <meta name="description" content={pageDesc} />
     <link rel="canonical" href={canonical} />
 
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
     <meta property="og:type" content="website" />
-    <meta property="og:title" content={pageTitle} />
+    <meta property="og:title" content={title ? pageTitle : seo.title} />
     <meta property="og:description" content={pageDesc} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />

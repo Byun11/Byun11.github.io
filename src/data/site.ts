@@ -137,55 +137,78 @@ export const projects: readonly Project[] = [
   },
 ];
 
+export type PubIndex = 'SCIE' | 'Scopus' | 'KCI' | 'Conference';
+
 export type Publication = {
   year: number;
   title: string;
   authors: readonly string[];
   venue: string;
-  first?: boolean;
+  venueIndex: PubIndex;
+  /** JCR quartile, shown only where it is known. */
+  quartile?: string;
   doi?: string;
   url?: string;
 };
 
-// Merged Korean/English duplicate registrations of the same paper into one
-// entry each — Scholar lists both, but listing both here would pad the record.
+// Grouped by indexing rather than by year, so the SCIE article leads instead
+// of being buried under the most recent domestic entry.
+export const PUB_GROUPS: readonly { key: PubIndex; label: string; note?: string }[] = [
+  { key: 'SCIE', label: 'SCIE' },
+  { key: 'Scopus', label: 'Scopus' },
+  { key: 'KCI', label: 'KCI' },
+  { key: 'Conference', label: 'Domestic Conference' },
+];
+
+// Korean and English registrations of the same paper are merged into one
+// entry each; Scholar lists both.
 export const publications: readonly Publication[] = [
-  {
-    year: 2025,
-    title:
-      '대규모 언어 모델의 신뢰성 강화를 위한 검색 증강 생성(RAG) 기반 질문 응답 시스템 설계와 성능 평가',
-    authors: ['변재연', '김보경', '차경애'],
-    venue: '멀티미디어학회논문지 28(4), 560–568',
-    first: true,
-  },
-  {
-    year: 2025,
-    title: 'LLM 출력 구조 비교를 위한 공통 의미 기반 구성',
-    authors: ['변재연', '구자현', '이경하', '이용'],
-    venue: '한국정보과학회 학술발표논문집, 1114–1116',
-    first: true,
-  },
   {
     year: 2024,
     title:
       'Design and Implementation of an Interactive Question-Answering System with Retrieval-Augmented Generation for Personalized Databases',
     authors: ['Jaeyeon Byun', 'Bokyeong Kim', 'Kyung-Ae Cha', 'Eunhyung Lee'],
     venue: 'Applied Sciences 14(17), 7995',
-    first: true,
+    venueIndex: 'SCIE',
+    quartile: 'Q1',
     doi: '10.3390/app14177995',
     url: 'https://doi.org/10.3390/app14177995',
+  },
+  {
+    year: 2023,
+    title: 'Development of Mobile-Device App Based on YOLOv7 for Safety Monitoring',
+    authors: ['J. T. Ryu', 'Bokyeong Kim', 'Jaeyeon Byun', 'Kyung-Ae Cha'],
+    venue: 'International Journal of Applied Engineering & Technology 5(4), 2419–2424',
+    venueIndex: 'Scopus',
+  },
+  {
+    year: 2025,
+    title:
+      '대규모 언어 모델의 신뢰성 강화를 위한 검색 증강 생성(RAG) 기반 질문 응답 시스템 설계와 성능 평가',
+    authors: ['변재연', '김보경', '차경애'],
+    venue: '멀티미디어학회논문지 28(4), 560–568',
+    venueIndex: 'KCI',
   },
   {
     year: 2024,
     title: 'Mobile App for Detecting Canine Skin Diseases Using U-Net Image Segmentation',
     authors: ['Bokyeong Kim', 'Jaeyeon Byun', 'Kyung-Ae Cha'],
     venue: 'Journal of Korea Society of Industrial Information Systems 29(4), 25–34',
+    venueIndex: 'KCI',
   },
   {
     year: 2024,
     title: 'Generating Sponsored Blog Texts through Fine-Tuning of Korean LLMs',
     authors: ['Bokyeong Kim', 'Jaeyeon Byun', 'Kyung-Ae Cha'],
     venue: 'Journal of Korea Society of Industrial Information Systems 29(3), 1–12',
+    venueIndex: 'KCI',
+  },
+  {
+    year: 2025,
+    title: 'LLM 출력 구조 비교를 위한 공통 의미 기반 구성',
+    authors: ['변재연', '구자현', '이경하', '이용'],
+    venue: '한국정보과학회 학술발표논문집, 1114–1116',
+    venueIndex: 'Conference',
   },
 ];
 
