@@ -9,7 +9,7 @@ const isCurrent = (href: string) =>
 <header id="site-header" class="fixed inset-x-0 top-4 z-50 md:top-8">
   <div class="hwrap mx-auto max-w-[1280px]">
     <!-- Mobile: full-width glass panel (§21) -->
-    <div class="mbar glass-bar md:hidden">
+    <div class="mbar glass-bar">
       <a href="/" class="display mbar-logo text-xl tracking-tight">JB</a>
       <button
         type="button"
@@ -188,6 +188,14 @@ const isCurrent = (href: string) =>
     .mbar,
     .mbar-logo {
       transition: none;
+    }
+  }
+
+  /* Desktop has its own pill nav. This must come after `.mbar { display:
+     flex }` — same specificity, so source order decides. */
+  @media (min-width: 768px) {
+    .mbar {
+      display: none;
     }
   }
 </style>
